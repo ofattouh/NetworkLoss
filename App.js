@@ -35,7 +35,7 @@ export default class App extends Component {
 
   // Updating the state rerenders the DOM
   renderMask() {
-    console.log("\n\nthis.state: ", this.state);
+    // console.log("\n\nthis.state: ", this.state);
 
     if (this.state.offline) {
       return (
