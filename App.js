@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Platform } from 'react-native';
 import NetInfo from "@react-native-community/netinfo";
 
 export default class App extends Component {
@@ -22,10 +22,18 @@ export default class App extends Component {
     this.unsubscribe = NetInfo.addEventListener(connectionInfo => {
       // console.log("\n\nconnectionInfo: ", connectionInfo);
 
-      this.setState({
-        online: connectionInfo.isWifiEnabled,
-        offline: !connectionInfo.isWifiEnabled,
-      });
+      if (Platform.OS === 'ios'){
+        this.setState({
+          online: connectionInfo.type !== 'none',
+          offline: connectionInfo.type === 'none',
+        });
+      } else {
+        this.setState({ 
+          // Android only
+          online: connectionInfo.isWifiEnabled,
+          offline: !connectionInfo.isWifiEnabled,
+        });
+      }
     });
   }
 
@@ -35,8 +43,6 @@ export default class App extends Component {
 
   // Updating the state rerenders the DOM
   renderMask() {
-    // console.log("\n\nthis.state: ", this.state);
-
     if (this.state.offline) {
       return (
         <View style={styles.mask}>
