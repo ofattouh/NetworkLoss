@@ -20,11 +20,11 @@ export default class App extends Component {
     super(props);
 
     this.unsubscribe = NetInfo.addEventListener(connectionInfo => {
-      console.log("\n\nconnectionInfo: ", connectionInfo);
+      // console.log("\n\nconnectionInfo: ", connectionInfo);
 
       this.setState({
-        online: connectionInfo.type !== 'none',
-        offline: connectionInfo.type === 'none',
+        online: connectionInfo.isWifiEnabled,
+        offline: !connectionInfo.isWifiEnabled,
       });
     });
   }
@@ -35,6 +35,8 @@ export default class App extends Component {
 
   // Updating the state rerenders the DOM
   renderMask() {
+    console.log("\n\nthis.state: ", this.state);
+
     if (this.state.offline) {
       return (
         <View style={styles.mask}>
